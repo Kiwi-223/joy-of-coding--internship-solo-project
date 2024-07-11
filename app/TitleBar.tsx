@@ -3,23 +3,31 @@ import React from "react";
 import { FaListCheck } from "react-icons/fa6";
 
 const TitleBar = () => {
+  const links = [
+    { lable: "All tasks", href: "/" },
+    { lable: "Open tasks", href: "/" },
+    { lable: "Closed tasks", href: "/" },
+    { lable: "New task", href: "/" },
+  ];
+
   return (
     <>
       <div className="flex px-5 h-14 items-center text-center text-emerald-600">
         <FaListCheck />
         <Link href="/">To Do Tasks</Link>
       </div>
-      <div className="flex space-x-6 border-b mb-5 px-5 h-14">
-        <nav className="items-center  hover:bg-zinc-500">
-          <Link href="/">All tasks</Link> {/* All tasks */}
-          <Link href="/">Open tasks</Link> {/* Open tasks */}
-          <Link href="/">Finished tasks</Link> {/* Finished tasks */}
-          <Link href="/">New task</Link> {/* New task */}
+      <div className=" space-x-6 border-b mb-5  h-14">
+        <nav>
+          {links.map((link) => (
+            <Link href={link.href} className="hover:bg-zinc-500 px-5 ">
+              {link.lable}
+            </Link>
+          ))}
           {/* Account and logout dropdown */}
         </nav>
-        <nav className="flex text-right">
+        <nav className="text-right">
           {/* Account and logout dropdown */}
-          <Link href="/" className="flex text-right">
+          <Link href="/" >
             Logout
           </Link>{" "}
           {/* New task */}
