@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <TitleBar />
         <main>{children}</main>
-        </body>
+      </body>
     </html>
   );
 }
