@@ -587,10 +587,6 @@ video {
   --tw-border-opacity: 1;
   border-top-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
-.bg-gray-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-}
 .bg-zinc-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(24 24 27 / var(--tw-bg-opacity));
@@ -639,10 +635,6 @@ body {
   color: rgb(var(--foreground-rgb));
   background-color: rgb(65, 65, 65);
   }
-
-.\*\:text-right > * {
-  text-align: right;
-}
 
 .hover\:bg-zinc-500:hover {
   --tw-bg-opacity: 1;

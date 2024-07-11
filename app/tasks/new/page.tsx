@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const newTask = () => {
-  return (
-    <div>newTask</div>
-  )
-}
+  return <div>newTask</div>;
+};
 
-export default newTask
+export default newTask;

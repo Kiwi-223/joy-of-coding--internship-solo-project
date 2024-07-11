@@ -19,7 +19,7 @@ model Task {
   description String?
   completed   Boolean  @default(false)
   priority    Priority
-  dueDate     DateTime
+  dueDate     DateTime @default(now())
 }
 
 enum Priority {

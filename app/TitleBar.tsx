@@ -19,14 +19,18 @@ const TitleBar = () => {
       <div className="space-x-6 border-b mb-5">
         <nav>
           {links.map((link) => (
-            <Link href={link.href} className="hover:bg-zinc-500 border-t-white px-5 ">
+            <Link
+              href={link.href}
+              className="hover:bg-zinc-500 border-t-white px-5 "
+            >
               {link.lable}
             </Link>
           ))}
-          <Link href="/" className="hover:bg-zinc-500 px-5 text-right">Logout</Link>
+          <Link href="/" className="hover:bg-zinc-500 px-5 text-right">
+            Logout
+          </Link>
           {/* Account and logout dropdown */}
         </nav>
-        
       </div>
     </div>
   );
