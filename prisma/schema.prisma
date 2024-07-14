@@ -15,8 +15,8 @@ datasource db {
 
 model Task {
   id          Int      @id @default(autoincrement())
-  title       String   @unique
-  description String?
+  title       String   @unique @db.VarChar(255)
+  description String?   @db.VarChar(255)
   completed   Boolean  @default(false)
   priority    Priority
   dueDate     DateTime @default(now())
