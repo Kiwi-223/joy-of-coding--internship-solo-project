@@ -1,7 +1,10 @@
 import React from "react";
 
+
 const tasksPage = () => {
-  return <div>tasksPage</div>;
+  return (
+  <div>taskPage</div>
+);
 };
 
 export default tasksPage;
