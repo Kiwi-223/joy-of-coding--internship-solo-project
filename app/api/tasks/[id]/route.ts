@@ -34,7 +34,9 @@ export async function DELETE(request:NextRequest, { params }: { params: { id: st
     return NextResponse.json(deleteTask)
 }
 
-export async function PATCH(request:NextRequest, { params }: { params: { id: string } }) {
+
+//update PATCH params and data inputs
+export async function PATCH(request:NextRequest, { params }: { params: { id: string }}, title:string, description:string, priority:string) {
   const task = await prisma.task.findUnique({
     where: {
       id: (parseInt(params.id)),
@@ -49,8 +51,10 @@ export async function PATCH(request:NextRequest, { params }: { params: { id: str
       id: parseInt(params.id),
     },
     data: {
-      id: parseInt(params.id),
-    }
+      title: title,
+      description: ("Update"),
+      priority: ("Low")
+    },
   })
   return NextResponse.json(editTask)
 }
