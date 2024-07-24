@@ -1,6 +1,6 @@
 "use client";
 
-import PriorityDropDown from "@/app/componants/priorityDropDown";
+import PriorityDropDown from "@/app/componants/PriorityDropDown";
 import {
   Box,
   Card,
@@ -17,6 +17,7 @@ import { useForm, Controller } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { priotities } from "@/app/types";
 
 interface TaskForm {
   title: string;
@@ -37,9 +38,13 @@ const newTask = () => {
     setStartDate(date);
     // setValue("dueDate", startDate);
   };
+
+  const handleCancel = () => {
+    router.push("/tasks");
+  };
   return (
     <form
-      className="w-800px"
+      className="w-3/4 h-fit"
       onSubmit={handleSubmit(async (data) => {
         await axios.post("/api/tasks", data);
         router.push("/tasks");
@@ -53,10 +58,12 @@ const newTask = () => {
             </Text>
             <Flex className="gap-5">
               <TextField.Root
+                className="w-1/2"
                 placeholder="Title"
                 {...register("title")}
               ></TextField.Root>
               <PriorityDropDown
+                priotities={priotities}
                 onChange={(priorityLevel) => {
                   setValue("priority", priorityLevel);
                 }}
@@ -71,15 +78,18 @@ const newTask = () => {
                 />
               </Text>
             </Flex>
-            <TextArea placeholder="Description" {...register("description")} />
+            <TextArea
+              className="h-72"
+              placeholder="Description"
+              {...register("description")}
+            />
           </Grid>
           <Grid columns="2" gap="2">
-            <Button variant="surface">Cancel</Button>
+            {/* <Button variant="surface" onChange={handleCancel}>Cancel</Button> */}
             <Button>Save</Button>
           </Grid>
         </Flex>
       </Card>
-      5
     </form>
   );
 };

@@ -506,6 +506,27 @@ video {
 .h-14 {
   height: 3.5rem;
 }
+.h-72 {
+  height: 18rem;
+}
+.h-fit {
+  height: fit-content;
+}
+.w-1\/2 {
+  width: 50%;
+}
+.w-14 {
+  width: 3.5rem;
+}
+.w-3\/4 {
+  width: 75%;
+}
+.w-40 {
+  width: 10rem;
+}
+.w-72 {
+  width: 18rem;
+}
 .gap-1 {
   gap: 0.25rem;
 }
@@ -553,6 +574,9 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 :root {

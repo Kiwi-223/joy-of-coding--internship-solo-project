@@ -3,9 +3,10 @@ import React, { ChangeEvent } from "react";
 
 interface Props {
   onChange: (value: string) => void;
+  priotities: string[];
 }
 
-const PriorityDropDown = ({ onChange }: Props) => {
+const PriorityDropDown = ({ onChange, priotities }: Props) => {
   const handleSelection = (selected: string) => {
     onChange(selected);
   };
@@ -16,38 +17,18 @@ const PriorityDropDown = ({ onChange }: Props) => {
         <Select.Trigger />
         <Select.Content>
           <Select.Group>
-            <Select.Item
-              value="Low"
-              onSelect={() => {
-                handleSelection("Low");
-              }}
-            >
-              Low
-            </Select.Item>
-            <Select.Item
-              value="Medium"
-              onSelect={() => {
-                handleSelection("Medium");
-              }}
-            >
-              Medium
-            </Select.Item>
-            <Select.Item
-              value="High"
-              onSelect={() => {
-                handleSelection("High");
-              }}
-            >
-              High
-            </Select.Item>
-            <Select.Item
-              value="Urgent"
-              onSelect={() => {
-                handleSelection("Urgent");
-              }}
-            >
-              Urgent
-            </Select.Item>
+            {priotities.map((priority: string) => {
+              return (
+                <Select.Item
+                  value={priority}
+                  onSelect={() => {
+                    handleSelection(priority);
+                  }}
+                >
+                  {priority}
+                </Select.Item>
+              );
+            })}
           </Select.Group>
         </Select.Content>
       </Select.Root>
