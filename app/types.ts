@@ -10,17 +10,36 @@ export type TaskType = {
     dueDate: Date;
   };
 
-  export const priotities = [
-    "Low",
-    "Medium",
-    "High",
-    "Urgent"
-]
+  export const priorities = [
+    {
+      label: "Low",
+      value: "low",
+    },
+    {
+      label: "Medium",
+      value: "medium",
+    },
+    {
+      label: "High",
+      value: "high",
+    },
+    {
+    
+      label: "Urgent",
+      value: "urgent",
+    }
+  ]
 
-export const priorityFilters = [
-  "All",
+export const priorityFilter = [
+  "Any",
   "Low",
   "Medium",
   "High",
   "Urgent"
+]
+
+export const statusFilter = [
+  "Any",
+  "Completed",
+  "Incomplete"
 ]

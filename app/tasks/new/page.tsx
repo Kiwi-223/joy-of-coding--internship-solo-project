@@ -17,7 +17,7 @@ import { useForm, Controller } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { priotities } from "@/app/types";
+import { priorities } from "@/app/types";
 
 interface TaskForm {
   title: string;
@@ -33,10 +33,10 @@ const newTask = () => {
   const { register, control, handleSubmit, setValue } = useForm<TaskForm>({
     defaultValues: { dueDate: startDate, priority: priorityLevel },
   });
+
   const handleDateSelect = (date: Date) => {
     setValue("dueDate", date);
     setStartDate(date);
-    // setValue("dueDate", startDate);
   };
 
   const handleCancel = () => {
@@ -63,8 +63,7 @@ const newTask = () => {
                 {...register("title")}
               ></TextField.Root>
               <PriorityDropDown
-                priotities={priotities}
-                onChange={(priorityLevel) => {
+                onChange={(priorityLevel: string) => {
                   setValue("priority", priorityLevel);
                 }}
               />
