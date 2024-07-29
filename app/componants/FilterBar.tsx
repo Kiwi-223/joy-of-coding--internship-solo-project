@@ -54,7 +54,16 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
     <Box>
       <Flex gap="2">
         <Text>Filters:</Text>
-        <FilterSelectDropDown></FilterSelectDropDown>
+        <FilterSelectDropDown
+          title="Status"
+          options={statusFilter}
+          onChange={() => setIsFiltered}
+        ></FilterSelectDropDown>
+        <FilterSelectDropDown
+          title="Priority"
+          options={priorityFilter}
+          onChange={() => setIsFiltered}
+        ></FilterSelectDropDown>
         {isFiltered && (
           <Button variant="ghost" onClick={handleReset}>
             Clear Filters <LuX className="ml-2 h-4 w-4" />

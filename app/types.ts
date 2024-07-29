@@ -31,15 +31,34 @@ export type TaskType = {
   ]
 
 export const priorityFilter = [
-  "Any",
-  "Low",
-  "Medium",
-  "High",
-  "Urgent"
+  {
+    label: "Low",
+    value: "low",
+  },
+  {
+    label: "Medium",
+    value: "medium",
+  },
+  {
+    label: "High",
+    value: "high",
+  },
+  {
+  
+    label: "Urgent",
+    value: "urgent",
+  }
 ]
 
 export const statusFilter = [
-  "Any",
-  "Completed",
-  "Incomplete"
+  {
+    label: "Completed",
+    value: true,
+  },
+  {
+  
+    label: "Incomplete",
+    value: false,
+  }
+
 ]
