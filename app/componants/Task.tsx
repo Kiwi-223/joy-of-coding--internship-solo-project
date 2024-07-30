@@ -28,7 +28,7 @@ const Task = ({ tasks }: Props) => {
       <FilterBar
         setFilteredTasks={(newTasks) => setFilteredTasks(newTasks)}
         allTasks={tasks}
-      ></FilterBar>
+      />
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -52,40 +52,21 @@ const Task = ({ tasks }: Props) => {
         <Table.Body>
           {filteredTasks.map((task: TaskType) => {
             return (
-              <Table.Row align="start">
-                <Table.Cell maxWidth="25px">Completed</Table.Cell>
+              <Table.Row align="start" key={task.id}>
+                <Table.Cell maxWidth="25px">
+                  <Checkbox checked={task.completed} aria-readonly />
+                </Table.Cell>
                 <Table.Cell maxWidth="25px">{task.priority}</Table.Cell>
                 <Table.ColumnHeaderCell maxWidth="56px">
                   {task.title}
                 </Table.ColumnHeaderCell>
                 <Table.Cell maxWidth="288px">{task.description}</Table.Cell>
                 <Table.Cell maxWidth="25px">{task.dueDate}</Table.Cell>
-                {/* {console.log(task.dueDate.toLocaleDateString)} */}
               </Table.Row>
             );
           })}
         </Table.Body>
       </Table.Root>
-
-      {/*       
-          <>
-          
-          <Box>
-            <Card>
-              <Flex gap="8">
-                <Checkbox defaultChecked color="green"/>
-                <Text className="w-14">{task.priority}</Text>
-                <Heading size="3" className="w-40">
-                  {task.title}
-                </Heading>
-                <Text className="w-1">{task.description}</Text>
-                <Text>{task.dueDate}</Text>
-              </Flex>
-            </Card>
-          </Box>
-          </>
-        );
-      })} */}
     </div>
   );
 };

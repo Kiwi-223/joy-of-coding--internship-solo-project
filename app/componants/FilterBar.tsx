@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Box, Button, Flex, Text } from "@radix-ui/themes";
-import DropDown from "./PriorityDropDown";
 import { statusFilter, priorityFilter, TaskType } from "../types";
 import { LuX } from "react-icons/lu";
 import FilterSelectDropDown from "./FilterSelectDropDown";
@@ -12,42 +11,47 @@ interface Props {
 }
 
 const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
-  const [tasks, setTasks] = useState<TaskType[]>(allTasks);
-  const [priority, setPriority] = useState("Any");
-  const [status, setStatus] = useState("Any");
+  const [priority, setPriority] = useState<string[]>([]);
+  const [status, setStatus] = useState<boolean[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
 
-  const handlePriority = (priority: string) => {
-    console.log(priority);
-    if (priority === "Any") {
-      setFilteredTasks(tasks);
-    } else {
-      const newTasks = tasks.filter((task) => task.priority === priority);
-      setFilteredTasks(newTasks);
+  const filterTasks = (
+    selectedPriority: string[],
+    selectedStatus: boolean[]
+  ) => {
+    let filteredTasks = allTasks;
+
+    if (selectedPriority.length > 0) {
+      filteredTasks = filteredTasks.filter((task) =>
+        selectedPriority.includes(task.priority)
+      );
     }
+
+    if (selectedStatus.length > 0) {
+      filteredTasks = filteredTasks.filter((task) =>
+        selectedStatus.includes(task.completed)
+      );
+    }
+
+    setFilteredTasks(filteredTasks);
+    setIsFiltered(selectedPriority.length > 0 || selectedStatus.length > 0);
   };
 
-  const handleStatus = (status: string) => {
-    // console.log(status === "Completed");
-    if (status === "Any") {
-      setFilteredTasks(tasks);
-    } else {
-      if (status === "Completed") {
-        // console.log(status === "Completed")
-        const newTasks = tasks.filter((task) => task.completed === true);
-        // console.log(newTasks)
-        setFilteredTasks(newTasks);
-      } else {
-        const newTasks = tasks.filter((task) => task.completed === false);
-        setFilteredTasks(newTasks);
-      }
-      setIsFiltered(true);
-    }
+  const handlePriority = (selectedPriority: string[]) => {
+    setPriority(selectedPriority);
+    filterTasks(selectedPriority, status);
+  };
+
+  const handleStatus = (selectedStatus: boolean[]) => {
+    setStatus(selectedStatus);
+    filterTasks(priority, selectedStatus);
   };
 
   const handleReset = () => {
-    // handleStatus("Completed");
-    // setFilteredTasks(allTasks);
+    setPriority([]);
+    setStatus([]);
+    setFilteredTasks(allTasks);
+    setIsFiltered(false);
   };
 
   return (
@@ -57,13 +61,14 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
         <FilterSelectDropDown
           title="Status"
           options={statusFilter}
-          onChange={() => setIsFiltered}
-        ></FilterSelectDropDown>
+          onChange={handleStatus}
+        />
+
         <FilterSelectDropDown
           title="Priority"
           options={priorityFilter}
-          onChange={() => setIsFiltered}
-        ></FilterSelectDropDown>
+          onChange={handlePriority}
+        />
         {isFiltered && (
           <Button variant="ghost" onClick={handleReset}>
             Clear Filters <LuX className="ml-2 h-4 w-4" />

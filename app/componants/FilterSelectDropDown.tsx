@@ -1,33 +1,26 @@
-import {
-  Button,
-  Box,
-  Flex,
-  Popover,
-  Text,
-  Checkbox
-} from "@radix-ui/themes";
+import { Button, Box, Flex, Popover, Text, Checkbox } from "@radix-ui/themes";
 import React, { useState } from "react";
 
 interface Props {
   title: string;
   options: {
     label: string;
-    value: string, ;
+    value: string | boolean;
   }[];
-  onChange: (selectedValues: string[]) => void;
+  onChange: (selectedValues: any[]) => void;
 }
 
-const FilterSelectDropDown = ({ options, title }: Props) => {
-  const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set());
+const FilterSelectDropDown = ({ options, title, onChange }: Props) => {
+  const [selectedValues, setSelectedValues] = useState<(string | boolean)[]>(
+    []
+  );
 
-  const handleCheckboxChange = (value: string) => {
-    setSelectedValues(prevSelectedValues => {
-      const newSelectedValues = new Set(prevSelectedValues);
-      if (newSelectedValues.has(value)) {
-        newSelectedValues.delete(value);
-      } else {
-        newSelectedValues.add(value);
-      }
+  const handleCheckboxChange = (value: string | boolean) => {
+    setSelectedValues((prevSelectedValues) => {
+      const newSelectedValues = prevSelectedValues.includes(value)
+        ? prevSelectedValues.filter((oldValue) => oldValue !== value)
+        : [...prevSelectedValues, value];
+      onChange(newSelectedValues);
       return newSelectedValues;
     });
   };
@@ -43,20 +36,18 @@ const FilterSelectDropDown = ({ options, title }: Props) => {
       <Popover.Content width="360px">
         <Flex gap="3">
           <Box flexGrow="1">
-              {options.map((option) => {
-                return (
-                  <Flex gap={"2"}>
-                    <Checkbox
-                    key={option.value}
-                    checked={selectedValues.has(option.value)}
+            {options.map((option) => {
+              return (
+                <Flex key={option.value.toString()} gap={"2"}>
+                  <Checkbox
+                    checked={selectedValues.includes(option.value)}
                     onCheckedChange={() => handleCheckboxChange(option.value)}
-                    aria-checked={selectedValues.has(option.value)}
-                    />
-                    <Text>{option.label}</Text>
-                  </ Flex>
-                );
-              })}
-
+                    aria-checked={selectedValues.includes(option.value)}
+                  />
+                  <Text>{option.label}</Text>
+                </Flex>
+              );
+            })}
           </Box>
         </Flex>
       </Popover.Content>
