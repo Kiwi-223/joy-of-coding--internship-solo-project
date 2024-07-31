@@ -19,6 +19,7 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
     selectedPriority: string[],
     selectedStatus: boolean[]
   ) => {
+    console.log(selectedPriority)
     let filteredTasks = allTasks;
 
     if (selectedPriority.length > 0) {

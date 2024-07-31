@@ -11,18 +11,12 @@ interface Props {
 }
 
 const FilterSelectDropDown = ({ options, title, onChange }: Props) => {
-  const [selectedValues, setSelectedValues] = useState<(string | boolean)[]>(
-    []
-  );
+  const [selectedValues, setSelectedValues] = useState<(string | boolean)[]>([]);
 
   const handleCheckboxChange = (value: string | boolean) => {
-    setSelectedValues((prevSelectedValues) => {
-      const newSelectedValues = prevSelectedValues.includes(value)
-        ? prevSelectedValues.filter((oldValue) => oldValue !== value)
-        : [...prevSelectedValues, value];
-      onChange(newSelectedValues);
-      return newSelectedValues;
-    });
+    console.log(value)
+    setSelectedValues([value])
+    onChange(selectedValues);
   };
 
   return (
@@ -40,9 +34,8 @@ const FilterSelectDropDown = ({ options, title, onChange }: Props) => {
               return (
                 <Flex key={option.value.toString()} gap={"2"}>
                   <Checkbox
-                    checked={selectedValues.includes(option.value)}
                     onCheckedChange={() => handleCheckboxChange(option.value)}
-                    aria-checked={selectedValues.includes(option.value)}
+                    aria-checked={selectedValues?.includes(option.value)}
                   />
                   <Text>{option.label}</Text>
                 </Flex>
