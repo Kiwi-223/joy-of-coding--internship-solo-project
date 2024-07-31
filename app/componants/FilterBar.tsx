@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Box, Button, Flex, Text } from "@radix-ui/themes";
-import { statusFilter, priorityFilter, TaskType } from "../types";
+import { statusFilter, priorities, TaskType } from "../types";
 import { LuX } from "react-icons/lu";
 import FilterSelectDropDown from "./FilterSelectDropDown";
 
@@ -66,7 +66,7 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
 
         <FilterSelectDropDown
           title="Priority"
-          options={priorityFilter}
+          options={priorities}
           onChange={handlePriority}
         />
         {isFiltered && (

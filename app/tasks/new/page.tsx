@@ -64,6 +64,7 @@ const newTask = () => {
               ></TextField.Root>
               <PriorityDropDown
                 onChange={(priorityLevel: string) => {
+                  console.log(priorityLevel)
                   setValue("priority", priorityLevel);
                 }}
               />

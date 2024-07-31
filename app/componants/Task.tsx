@@ -18,10 +18,7 @@ interface Props {
 
 const Task = ({ tasks }: Props) => {
   const [filteredTasks, setFilteredTasks] = useState<TaskType[]>(tasks);
-  const [completed, setCompleted] = useState(false);
-  // const handleFilteredTasks = (data: TaskType[]) => {
-  //   setFilteredTasks(data)
-  // }
+ 
 
   return (
     <div>
