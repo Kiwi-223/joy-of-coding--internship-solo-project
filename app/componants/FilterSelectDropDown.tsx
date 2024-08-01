@@ -1,5 +1,5 @@
 import { Button, Box, Flex, Popover, Text, Checkbox } from "@radix-ui/themes";
-import React, { useState } from "react";
+import React from "react";
 
 interface Props {
   title: string;
@@ -7,18 +7,16 @@ interface Props {
     label: string;
     value: string | boolean;
   }[];
-  onChange: (selectedValues: any[]) => void;
+  selectedValues: (string | boolean)[];
+  onChange: (selectedValues: any) => void;
 }
 
-const FilterSelectDropDown = ({ options, title, onChange }: Props) => {
-  const [selectedValues, setSelectedValues] = useState<(string | boolean)[]>([]);
-
-  const handleCheckboxChange = (value: string | boolean) => {
-    console.log(value)
-    setSelectedValues([value])
-    onChange(selectedValues);
-  };
-
+const FilterSelectDropDown = ({
+  options,
+  title,
+  selectedValues,
+  onChange,
+}: Props) => {
   return (
     <Popover.Root>
       <Popover.Trigger>
@@ -34,7 +32,7 @@ const FilterSelectDropDown = ({ options, title, onChange }: Props) => {
               return (
                 <Flex key={option.value.toString()} gap={"2"}>
                   <Checkbox
-                    onCheckedChange={() => handleCheckboxChange(option.value)}
+                    onCheckedChange={() => onChange(option.value)}
                     aria-checked={selectedValues?.includes(option.value)}
                   />
                   <Text>{option.label}</Text>

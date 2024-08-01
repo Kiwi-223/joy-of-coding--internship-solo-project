@@ -19,7 +19,8 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
     selectedPriority: string[],
     selectedStatus: boolean[]
   ) => {
-    console.log(selectedPriority)
+    console.log(selectedPriority);
+    console.log(selectedStatus)
     let filteredTasks = allTasks;
 
     if (selectedPriority.length > 0) {
@@ -38,14 +39,14 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
     setIsFiltered(selectedPriority.length > 0 || selectedStatus.length > 0);
   };
 
-  const handlePriority = (selectedPriority: string[]) => {
-    setPriority(selectedPriority);
-    filterTasks(selectedPriority, status);
+  const handlePriority = (selectedPriority: string) => {
+    setPriority([...priority, selectedPriority]);
+    filterTasks([...priority, selectedPriority], status);
   };
 
-  const handleStatus = (selectedStatus: boolean[]) => {
-    setStatus(selectedStatus);
-    filterTasks(priority, selectedStatus);
+  const handleStatus = (selectedStatus: boolean) => {
+    setStatus([...status, selectedStatus]);
+    filterTasks(priority, [...status, selectedStatus]);
   };
 
   const handleReset = () => {
@@ -62,12 +63,14 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
         <FilterSelectDropDown
           title="Status"
           options={statusFilter}
+          selectedValues={status}
           onChange={handleStatus}
         />
 
         <FilterSelectDropDown
           title="Priority"
           options={priorities}
+          selectedValues={priority}
           onChange={handlePriority}
         />
         {isFiltered && (
@@ -81,3 +84,18 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
 };
 
 export default FilterBar;
+
+
+
+// const handleCheckboxChange = (value: string | boolean) => {
+//   onChange(value)
+  // if (selectedValues?.includes(value)) {
+  //   setSelectedValues(
+  //     selectedValues.filter((oldValue) => oldValue !== value)
+  //   );
+  //   onChange(selectedValues.filter((oldValue) => oldValue !== value));
+  // } else {
+  //   setSelectedValues([...selectedValues, value]);
+  //   onChange([...selectedValues, value]);
+  // }
+// };
