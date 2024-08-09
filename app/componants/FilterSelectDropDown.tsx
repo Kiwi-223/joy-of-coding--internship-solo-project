@@ -8,7 +8,7 @@ interface Props {
     value: string | boolean;
   }[];
   selectedValues: (string | boolean)[];
-  onChange: (selectedValues: any) => void;
+  onChange: (newValue: any) => void;
 }
 
 const FilterSelectDropDown = ({
@@ -33,7 +33,7 @@ const FilterSelectDropDown = ({
                 <Flex key={option.value.toString()} gap={"2"}>
                   <Checkbox
                     onCheckedChange={() => onChange(option.value)}
-                    aria-checked={selectedValues?.includes(option.value)}
+                    aria-checked={selectedValues.includes(option.value)}
                   />
                   <Text>{option.label}</Text>
                 </Flex>

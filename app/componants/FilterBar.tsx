@@ -19,18 +19,18 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
     selectedPriority: string[],
     selectedStatus: boolean[]
   ) => {
-    console.log(selectedPriority);
-    console.log(selectedStatus)
+    // console.log(selectedPriority, "priority");
     let filteredTasks = allTasks;
 
     if (selectedPriority.length > 0) {
-      filteredTasks = filteredTasks.filter((task) =>
-        selectedPriority.includes(task.priority)
-      );
+      filteredTasks = allTasks.filter((task) => {
+        console.log(selectedPriority.includes(task.priority));
+        return selectedPriority.includes(task.priority);
+      });
     }
 
     if (selectedStatus.length > 0) {
-      filteredTasks = filteredTasks.filter((task) =>
+      filteredTasks = allTasks.filter((task) =>
         selectedStatus.includes(task.completed)
       );
     }
@@ -40,13 +40,29 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
   };
 
   const handlePriority = (selectedPriority: string) => {
-    setPriority([...priority, selectedPriority]);
-    filterTasks([...priority, selectedPriority], status);
+    if (priority.includes(selectedPriority)) {
+      setPriority(priority.filter((oldValue) => oldValue !== selectedPriority));
+      filterTasks(
+        priority.filter((oldValue) => oldValue !== selectedPriority),
+        status
+      );
+    } else {
+      setPriority([...priority, selectedPriority]);
+      filterTasks([...priority, selectedPriority], status);
+    }
   };
 
   const handleStatus = (selectedStatus: boolean) => {
-    setStatus([...status, selectedStatus]);
-    filterTasks(priority, [...status, selectedStatus]);
+    if (status.includes(selectedStatus)) {
+      setStatus(status.filter((oldValue) => oldValue !== selectedStatus));
+      filterTasks(
+        priority,
+        status.filter((oldValue) => oldValue !== selectedStatus)
+      );
+    } else {
+      setStatus([...status, selectedStatus]);
+      filterTasks(priority, [...status, selectedStatus]);
+    }
   };
 
   const handleReset = () => {
@@ -84,18 +100,3 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
 };
 
 export default FilterBar;
-
-
-
-// const handleCheckboxChange = (value: string | boolean) => {
-//   onChange(value)
-  // if (selectedValues?.includes(value)) {
-  //   setSelectedValues(
-  //     selectedValues.filter((oldValue) => oldValue !== value)
-  //   );
-  //   onChange(selectedValues.filter((oldValue) => oldValue !== value));
-  // } else {
-  //   setSelectedValues([...selectedValues, value]);
-  //   onChange([...selectedValues, value]);
-  // }
-// };

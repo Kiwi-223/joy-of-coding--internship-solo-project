@@ -2,7 +2,6 @@
 
 import PriorityDropDown from "@/app/componants/PriorityDropDown";
 import {
-  Box,
   Card,
   Flex,
   Grid,
@@ -13,11 +12,10 @@ import {
 } from "@radix-ui/themes";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { priorities } from "@/app/types";
 
 interface TaskForm {
   title: string;
@@ -64,7 +62,7 @@ const newTask = () => {
               ></TextField.Root>
               <PriorityDropDown
                 onChange={(priorityLevel: string) => {
-                  console.log(priorityLevel)
+                  console.log(priorityLevel);
                   setValue("priority", priorityLevel);
                 }}
               />

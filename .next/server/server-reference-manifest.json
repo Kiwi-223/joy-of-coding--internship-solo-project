@@ -2,13 +2,35 @@
   "node": {
     "2faf9f3d04d7279a361b684ee1c7c8af2a937696": {
       "workers": {
-        "app/tasks/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5CKi%5C%5Cgithub-classroom%5C%5CJoy-of-Coding%5C%5CTicket%207%5C%5Ctask_manager%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22getAllTasks%22%5D%5D%5D&__client_imported__=!"
+        "app/tasks/[id]/edit/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5CKi%5C%5Cgithub-classroom%5C%5CJoy-of-Coding%5C%5CTicket%207%5C%5Ctask_manager%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22getAllTasks%22%2C%22updateTask%22%2C%22getSingleTask%22%5D%5D%5D&__client_imported__=!",
+        "app/tasks/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5CKi%5C%5Cgithub-classroom%5C%5CJoy-of-Coding%5C%5CTicket%207%5C%5Ctask_manager%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22getAllTasks%22%2C%22updateTask%22%2C%22getSingleTask%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
+        "app/tasks/[id]/edit/page": "rsc",
+        "app/tasks/page": "rsc"
+      }
+    },
+    "6ebeac863cf1803f2eafba3299aeed3bd5a1c42d": {
+      "workers": {
+        "app/tasks/[id]/edit/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5CKi%5C%5Cgithub-classroom%5C%5CJoy-of-Coding%5C%5CTicket%207%5C%5Ctask_manager%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22getAllTasks%22%2C%22updateTask%22%2C%22getSingleTask%22%5D%5D%5D&__client_imported__=!",
+        "app/tasks/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5CKi%5C%5Cgithub-classroom%5C%5CJoy-of-Coding%5C%5CTicket%207%5C%5Ctask_manager%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22getAllTasks%22%2C%22updateTask%22%2C%22getSingleTask%22%5D%5D%5D&__client_imported__=!"
+      },
+      "layer": {
+        "app/tasks/[id]/edit/page": "rsc",
+        "app/tasks/page": "rsc"
+      }
+    },
+    "8433c7d3b81e4a37df4b167585d367e9b4054bdf": {
+      "workers": {
+        "app/tasks/[id]/edit/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5CKi%5C%5Cgithub-classroom%5C%5CJoy-of-Coding%5C%5CTicket%207%5C%5Ctask_manager%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22getAllTasks%22%2C%22updateTask%22%2C%22getSingleTask%22%5D%5D%5D&__client_imported__=!",
+        "app/tasks/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5CKi%5C%5Cgithub-classroom%5C%5CJoy-of-Coding%5C%5CTicket%207%5C%5Ctask_manager%5C%5Capp%5C%5Cactions.ts%22%2C%5B%22getAllTasks%22%2C%22updateTask%22%2C%22getSingleTask%22%5D%5D%5D&__client_imported__=!"
+      },
+      "layer": {
+        "app/tasks/[id]/edit/page": "rsc",
         "app/tasks/page": "rsc"
       }
     }
   },
   "edge": {},
-  "encryptionKey": "v1b4TilA6DoOA1EI42oPgk5Vxgtm5i+33q/CSzKQAFU="
+  "encryptionKey": "rVGV6GQIbFncDjuuebyFA74Oza63PFD/A5H17zE0UPM="
 }

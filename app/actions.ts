@@ -1,5 +1,6 @@
 'use server'
 import axios from "axios";
+import { TaskType } from "./types";
 
 const baseURL = 'http://localhost:3000/api/tasks'
 
@@ -12,6 +13,41 @@ export async function getAllTasks() {
         throw new Error('Failed to fetch tasks');
     }
 }
+
+//Get single task
+export async function getSingleTask(id:string) {
+    try {
+        const response = await axios.get('http://localhost:3000/api/tasks/1');
+        return response.data; // Axios automatically parses the JSON
+    } catch (error) {
+        throw new Error('Failed to fetch task');
+    }
+}
+
+
+//update task
+export async function updateTask(task: TaskType) {
+    const taskURL = baseURL + task.id.toString()
+    try {
+        const response = await axios.patch(taskURL, task.id.toString());
+        return response.data;
+
+    } catch (error) {
+        throw new Error('Failed to update task');
+    }
+
+}
+
+
+// axios.patch(url[, data[, config]])
+// const updateUser = await prisma.user.update({
+//     where: {
+//       email: 'viola@prisma.io',
+//     },
+//     data: {
+//       name: 'Viola the Magnificent',
+//     },
+//   })
 
 // Make a request for a user with a given ID
 // axios.get('/user?ID=12345')

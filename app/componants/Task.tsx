@@ -1,15 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { TaskType } from "../types";
-import {
-  Box,
-  Card,
-  Checkbox,
-  Flex,
-  Heading,
-  Table,
-  Text,
-} from "@radix-ui/themes";
+import { TaskType, priorities } from "../types";
+import { Checkbox, Table } from "@radix-ui/themes";
 import FilterBar from "./FilterBar";
 
 interface Props {
@@ -18,7 +10,15 @@ interface Props {
 
 const Task = ({ tasks }: Props) => {
   const [filteredTasks, setFilteredTasks] = useState<TaskType[]>(tasks);
- 
+
+  const formatDate = (dateString: Date) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    });
+  };
 
   return (
     <div>
@@ -53,12 +53,20 @@ const Task = ({ tasks }: Props) => {
                 <Table.Cell maxWidth="25px">
                   <Checkbox checked={task.completed} aria-readonly />
                 </Table.Cell>
-                <Table.Cell maxWidth="25px">{task.priority}</Table.Cell>
+                {priorities.map((priority) => {
+                  if (task.priority === priority.value)
+                    return (
+                      <Table.Cell maxWidth="25px">{priority.label}</Table.Cell>
+                    );
+                })}
+
                 <Table.ColumnHeaderCell maxWidth="56px">
                   {task.title}
                 </Table.ColumnHeaderCell>
                 <Table.Cell maxWidth="288px">{task.description}</Table.Cell>
-                <Table.Cell maxWidth="25px">{task.dueDate}</Table.Cell>
+                <Table.Cell maxWidth="25px">
+                  {formatDate(task.dueDate)}
+                </Table.Cell>
               </Table.Row>
             );
           })}

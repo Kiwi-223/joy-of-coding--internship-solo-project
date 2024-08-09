@@ -1,12 +1,13 @@
 import { Flex, Select, Text } from "@radix-ui/themes";
 import { priorities } from "../types";
+import { Priority } from "@prisma/client";
 
 interface Props {
-  onChange: (value: string) => void;
+  onChange: (value: Priority) => void;
 }
 
 const PriorityDropDown = ({ onChange }: Props) => {
-  const handleSelection = (selected: string) => {
+  const handleSelection = (selected: Priority) => {
     onChange(selected);
   };
   return (

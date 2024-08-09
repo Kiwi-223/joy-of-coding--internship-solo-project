@@ -23,8 +23,8 @@ model Task {
 }
 
 enum Priority {
-  urgent
-  high
-  medium
   low
+  medium
+  high
+  urgent
 }
