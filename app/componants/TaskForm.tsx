@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { TaskType } from "../types";
 import { updateTask } from "../actions";
 import { Priority } from "@prisma/client";
+import axios from "axios";
 
 interface Props {
   task: TaskType;
@@ -60,32 +61,16 @@ const TaskForm = ({ task }: Props) => {
     if (task) {
       let updatedTask: TaskType;
       updatedTask = { ...formData, id: task.id };
+      console.log(updatedTask);
       updateTask(updatedTask);
     }
   };
-  // handleSubmit(async (data) => {
-  //             console.log('updated task',data)
-  //             if (task !== null) {
-  //                 updateTask(data)
-  //             }
 
   const handleCancel = () => {
     router.push("/tasks");
   };
   return (
-    <form
-      className="w-3/4 h-fit"
-      onSubmit={
-        // handleSubmit(async (data) => {
-        console.log("updated task")
-        //     if (task !== null) {
-        //         updateTask(data)
-        // }
-        // //   await axios.post("/api/tasks", data);
-        // //   router.push("/tasks");
-        //   })
-      }
-    >
+    <form className="w-3/4 h-fit" onSubmit={handleSubmit}>
       <Card size="2">
         <Flex direction="column" gap="3">
           <Grid gap="1">
@@ -98,11 +83,14 @@ const TaskForm = ({ task }: Props) => {
                 className="w-1/2"
                 placeholder="Title"
                 {...register("title")}
+                // onChange={(title: string) => {
+                //   setFormData({ ...formData, title: title });
+                // }}
               />
 
               <PriorityDropDown
                 onChange={(priorityLevel: Priority) => {
-                  setValue("priority", priorityLevel);
+                  setFormData({ ...formData, priority: priorityLevel });
                 }}
               />
 

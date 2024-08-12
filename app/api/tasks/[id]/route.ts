@@ -55,7 +55,7 @@ export async function PATCH(request:NextRequest, { params }: { params: { id: str
       title: body.title,
       description: body.description,
       completed: body.completed,
-      priority: body.description,
+      priority: body.priority,
       dueDate: body.dueDate
 
     },

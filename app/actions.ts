@@ -2,7 +2,7 @@
 import axios from "axios";
 import { TaskType } from "./types";
 
-const baseURL = 'http://localhost:3000/api/tasks'
+const baseURL = 'http://localhost:3000/api/tasks/'
 
 //getAllTasks
 export async function getAllTasks() {
@@ -29,7 +29,8 @@ export async function getSingleTask(id:string) {
 export async function updateTask(task: TaskType) {
     const taskURL = baseURL + task.id.toString()
     try {
-        const response = await axios.patch(taskURL, task.id.toString());
+        const response = await axios.patch(taskURL, task);
+        console.log(response.data);
         return response.data;
 
     } catch (error) {
