@@ -1,6 +1,8 @@
 'use server'
 import axios from "axios";
 import { TaskType } from "./types";
+import TaskForm from "./componants/TaskForm";
+
 
 const baseURL = 'http://localhost:3000/api/tasks/'
 
@@ -17,20 +19,29 @@ export async function getAllTasks() {
 //Get single task
 export async function getSingleTask(id:string) {
     try {
-        const response = await axios.get('http://localhost:3000/api/tasks/1');
+        const response = await axios.get('http://localhost:3000/api/tasks/[[...slug]]');
         return response.data; // Axios automatically parses the JSON
     } catch (error) {
         throw new Error('Failed to fetch task');
     }
 }
 
+//create new task
+export async function newTask(task:TaskForm) {
+    try {
+        const response = await axios.post(baseURL, task);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to create task');
+    }
+    
+}
 
 //update task
 export async function updateTask(task: TaskType) {
     const taskURL = baseURL + task.id.toString()
     try {
         const response = await axios.patch(taskURL, task);
-        console.log(response.data);
         return response.data;
 
     } catch (error) {

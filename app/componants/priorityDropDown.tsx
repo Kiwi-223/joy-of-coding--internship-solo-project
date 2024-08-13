@@ -4,16 +4,21 @@ import { Priority } from "@prisma/client";
 
 interface Props {
   onChange: (value: Priority) => void;
+  currentPriority?: string;
 }
 
-const PriorityDropDown = ({ onChange }: Props) => {
+const PriorityDropDown = ({ onChange, currentPriority = "low" }: Props) => {
   const handleSelection = (selected: Priority) => {
     onChange(selected);
   };
+
   return (
     <Flex className="gap-1">
       <Text>Priority</Text>
-      <Select.Root defaultValue="low" onValueChange={handleSelection}>
+      <Select.Root
+        defaultValue={currentPriority}
+        onValueChange={handleSelection}
+      >
         <Select.Trigger />
         <Select.Content>
           <Select.Group>

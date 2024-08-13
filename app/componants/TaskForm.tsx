@@ -16,12 +16,11 @@ import { useForm } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/navigation";
 import { TaskType } from "../types";
-import { updateTask } from "../actions";
+import { updateTask, newTask } from "../actions";
 import { Priority } from "@prisma/client";
-import axios from "axios";
 
 interface Props {
-  task: TaskType;
+  task?: TaskType;
 }
 
 interface TaskForm {
@@ -63,12 +62,16 @@ const TaskForm = ({ task }: Props) => {
       updatedTask = { ...formData, id: task.id };
       console.log(updatedTask);
       updateTask(updatedTask);
+    } else {
+      newTask(formData);
     }
+    router.push("");
   };
 
   const handleCancel = () => {
     router.push("/tasks");
   };
+
   return (
     <form className="w-3/4 h-fit" onSubmit={handleSubmit}>
       <Card size="2">
@@ -82,13 +85,14 @@ const TaskForm = ({ task }: Props) => {
               <TextField.Root
                 className="w-1/2"
                 placeholder="Title"
-                {...register("title")}
-                // onChange={(title: string) => {
-                //   setFormData({ ...formData, title: title });
-                // }}
+                {...register("title", {
+                  onChange: (e) =>
+                    setFormData({ ...formData, title: e.target.value }),
+                })}
               />
 
               <PriorityDropDown
+                currentPriority={formData.priority}
                 onChange={(priorityLevel: Priority) => {
                   setFormData({ ...formData, priority: priorityLevel });
                 }}
@@ -107,11 +111,16 @@ const TaskForm = ({ task }: Props) => {
             <TextArea
               className="h-72"
               placeholder="Description"
-              {...register("description")}
+              {...register("description", {
+                onChange: (e) =>
+                  setFormData({ ...formData, description: e.target.value }),
+              })}
             />
           </Grid>
           <Grid columns="2" gap="2">
-            {/* <Button variant="surface" onChange={handleCancel}>Cancel</Button> */}
+            <Button variant="surface" onChange={handleCancel}>
+              Cancel
+            </Button>
             <Button>Save</Button>
           </Grid>
         </Flex>
