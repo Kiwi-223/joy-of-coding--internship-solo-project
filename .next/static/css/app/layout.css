@@ -521,14 +521,17 @@ video {
 .h-fit {
   height: fit-content;
 }
-.w-1\/2 {
-  width: 50%;
-}
-.w-3\/4 {
-  width: 75%;
-}
 .w-4 {
   width: 1rem;
+}
+.w-fit {
+  width: fit-content;
+}
+.min-w-44 {
+  min-width: 11rem;
+}
+.justify-end {
+  justify-content: flex-end;
 }
 .gap-1 {
   gap: 0.25rem;

@@ -9,6 +9,7 @@ import {
   Button,
   TextArea,
   TextField,
+  Checkbox,
 } from "@radix-ui/themes";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
@@ -41,7 +42,7 @@ const TaskForm = ({ task }: Props) => {
     dueDate: task ? task.dueDate : startDate,
     priority: task ? task.priority : Priority.low,
   });
-  // handleSubmit,
+  const formTitle = task ? "Edit Task" : "New Task";
   const { register, setValue } = useForm<TaskForm>({
     defaultValues: {
       title: formData.title,
@@ -65,25 +66,28 @@ const TaskForm = ({ task }: Props) => {
     } else {
       newTask(formData);
     }
-    router.push("");
+    router.push("../tasks");
+    router.refresh();
   };
 
-  const handleCancel = () => {
-    router.push("/tasks");
+  const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push("/");
+    router.refresh();
   };
 
   return (
-    <form className="w-3/4 h-fit" onSubmit={handleSubmit}>
+    <form className="w-fit h-fit" onSubmit={handleSubmit}>
       <Card size="2">
         <Flex direction="column" gap="3">
           <Grid gap="1">
-            <Text as="div" weight="bold" size="2" mb="1">
-              Edit Task
+            <Text as="div" weight="bold" size="4" mb="1">
+              {formTitle}
             </Text>
 
-            <Flex className="gap-5">
+            <Flex className="gap-5" align="center">
               <TextField.Root
-                className="w-1/2"
+                className="min-w-44"
                 placeholder="Title"
                 {...register("title", {
                   onChange: (e) =>
@@ -98,14 +102,27 @@ const TaskForm = ({ task }: Props) => {
                 }}
               />
 
-              <Text className="gap-1">
+              <Flex className="gap-1" align="center">
                 Due Date:
                 <DatePicker
                   {...register("dueDate")}
                   selected={formData.dueDate}
                   onChange={(date) => handleDateSelect(date)}
                 />
-              </Text>
+              </Flex>
+
+              <Flex gap="1" align="center">
+                Completed:
+                <Checkbox
+                  aria-checked={formData.completed}
+                  color="green"
+                  onCheckedChange={(checked: boolean) =>
+                    setFormData({ ...formData, completed: checked })
+                  }
+                />
+              </Flex>
+
+              {/* checked={formData.completed} */}
             </Flex>
 
             <TextArea
@@ -117,12 +134,16 @@ const TaskForm = ({ task }: Props) => {
               })}
             />
           </Grid>
-          <Grid columns="2" gap="2">
-            <Button variant="surface" onChange={handleCancel}>
+          {/* <Grid columns="2" gap="100px"> */}
+          <Flex align={"baseline"}>
+            <Button variant="surface" onChange={handleCancel} size="3">
               Cancel
             </Button>
-            <Button>Save</Button>
-          </Grid>
+            <Button size="3" className="justify-end">
+              Save
+            </Button>
+          </Flex>
+          {/* </Grid> */}
         </Flex>
       </Card>
     </form>
