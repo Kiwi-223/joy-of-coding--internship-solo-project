@@ -13,8 +13,8 @@ const PriorityDropDown = ({ onChange, currentPriority = "low" }: Props) => {
   };
 
   return (
-    <Flex className="gap-1">
-      <Text>Priority</Text>
+    <Flex className="gap-1" align="center">
+      <Text>Priority:</Text>
       <Select.Root
         defaultValue={currentPriority}
         onValueChange={handleSelection}

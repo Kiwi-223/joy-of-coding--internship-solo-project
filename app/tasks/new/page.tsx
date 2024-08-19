@@ -2,10 +2,8 @@
 
 import TaskForm from "@/app/componants/TaskForm";
 
-
 const newTask = () => {
-  
-  return ( <TaskForm />);
+  return <TaskForm />;
 };
 
 export default newTask;
