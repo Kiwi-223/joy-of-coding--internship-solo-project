@@ -19,10 +19,10 @@ export async function getAllTasks() {
 //Get single task
 export async function getSingleTask(id:string) {
     try {
-        const response = await axios.get('http://localhost:3000/api/tasks/[[...slug]]');
+        const response = await axios.get(`http://localhost:3000/api/tasks/${id}`);
         return response.data; // Axios automatically parses the JSON
     } catch (error) {
-        throw new Error('Failed to fetch task');
+        throw new Error('Failed to get task');
     }
 }
 
