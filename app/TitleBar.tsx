@@ -5,9 +5,9 @@ import { FaListCheck } from "react-icons/fa6";
 const TitleBar = () => {
   const links = [
     { lable: "All tasks", href: "/tasks" },
-    { lable: "Open tasks", href: "/tasks" },
-    { lable: "Closed tasks", href: "/tasks" },
-    { lable: "New task", href: "/tasks/new" },
+    // { lable: "Open tasks", href: "/tasks" },
+    // { lable: "Closed tasks", href: "/tasks" },
+    { lable: "New Task", href: "/tasks/new" },
   ];
 
   return (

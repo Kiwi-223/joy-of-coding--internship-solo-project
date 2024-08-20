@@ -127,7 +127,7 @@ const TaskForm = ({ task }: Props) => {
               />
             </Grid>
             <Flex align={"baseline"}>
-              <Button
+              {/* <Button
                 type="button"
                 variant="surface"
                 onClick={() => router.push("./")}
@@ -138,11 +138,12 @@ const TaskForm = ({ task }: Props) => {
 
               <Button type="button" size="3" className="justify-end">
                 Save
-              </Button>
+              </Button> */}
             </Flex>
           </Flex>
         </Card>
       </form>
+      <Button onClick={handleSubmit}>Save</Button>
     </>
   );
 };
