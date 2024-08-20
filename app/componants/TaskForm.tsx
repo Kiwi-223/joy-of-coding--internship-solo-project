@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { TaskType } from "../types";
 import { updateTask, newTask } from "../actions";
 import { Priority } from "@prisma/client";
+import Link from "next/link";
 
 interface Props {
   task?: TaskType;
@@ -66,88 +67,94 @@ const TaskForm = ({ task }: Props) => {
     } else {
       newTask(formData);
     }
-    router.push("../tasks");
-    router.refresh();
-  };
-
-  const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    router.push("/");
-    router.refresh();
+    router.push("./");
   };
 
   return (
-    <form className="w-fit h-fit" onSubmit={handleSubmit}>
-      <Card size="2">
-        <Flex direction="column" gap="3">
-          <Grid gap="1">
-            <Text as="div" weight="bold" size="4" mb="1">
-              {formTitle}
-            </Text>
+    <>
+      <form className="w-fit h-fit" onSubmit={handleSubmit}>
+        <Card size="2">
+          <Flex direction="column" gap="3">
+            <Grid gap="1">
+              <Text as="div" weight="bold" size="4" mb="1">
+                {formTitle}
+              </Text>
 
-            <Flex className="gap-5" align="center">
-              <TextField.Root
-                className="min-w-44"
-                placeholder="Title"
-                {...register("title", {
+              <Flex className="gap-5" align="center">
+                <TextField.Root
+                  className="min-w-44"
+                  placeholder="Title"
+                  {...register("title", {
+                    onChange: (e) =>
+                      setFormData({ ...formData, title: e.target.value }),
+                  })}
+                />
+
+                <PriorityDropDown
+                  currentPriority={formData.priority}
+                  onChange={(priorityLevel: Priority) => {
+                    setFormData({ ...formData, priority: priorityLevel });
+                  }}
+                />
+
+                <Flex className="gap-1" align="center">
+                  Due Date:
+                  <DatePicker
+                    {...register("dueDate")}
+                    selected={formData.dueDate}
+                    onChange={(date) => handleDateSelect(date)}
+                  />
+                </Flex>
+
+                <Flex gap="1" align="center">
+                  Completed:
+                  <Checkbox
+                    aria-checked={formData.completed}
+                    color="green"
+                    onCheckedChange={(checked: boolean) =>
+                      setFormData({ ...formData, completed: checked })
+                    }
+                  />
+                </Flex>
+              </Flex>
+              <TextArea
+                className="h-72"
+                placeholder="Description"
+                {...register("description", {
                   onChange: (e) =>
-                    setFormData({ ...formData, title: e.target.value }),
+                    setFormData({ ...formData, description: e.target.value }),
                 })}
               />
+            </Grid>
+            <Flex align={"baseline"}>
+              <Button
+                type="button"
+                variant="surface"
+                onClick={() => router.push("./")}
+                size="3"
+              >
+                Cancel
+              </Button>
 
-              <PriorityDropDown
-                currentPriority={formData.priority}
-                onChange={(priorityLevel: Priority) => {
-                  setFormData({ ...formData, priority: priorityLevel });
-                }}
-              />
-
-              <Flex className="gap-1" align="center">
-                Due Date:
-                <DatePicker
-                  {...register("dueDate")}
-                  selected={formData.dueDate}
-                  onChange={(date) => handleDateSelect(date)}
-                />
-              </Flex>
-
-              <Flex gap="1" align="center">
-                Completed:
-                <Checkbox
-                  aria-checked={formData.completed}
-                  color="green"
-                  onCheckedChange={(checked: boolean) =>
-                    setFormData({ ...formData, completed: checked })
-                  }
-                />
-              </Flex>
-
-              {/* checked={formData.completed} */}
+              <Button type="button" size="3" className="justify-end">
+                Save
+              </Button>
             </Flex>
-
-            <TextArea
-              className="h-72"
-              placeholder="Description"
-              {...register("description", {
-                onChange: (e) =>
-                  setFormData({ ...formData, description: e.target.value }),
-              })}
-            />
-          </Grid>
-          {/* <Grid columns="2" gap="100px"> */}
-          <Flex align={"baseline"}>
-            <Button variant="surface" onChange={handleCancel} size="3">
-              Cancel
-            </Button>
-            <Button size="3" className="justify-end">
-              Save
-            </Button>
           </Flex>
-          {/* </Grid> */}
-        </Flex>
-      </Card>
-    </form>
+        </Card>
+      </form>
+    </>
   );
 };
 
 export default TaskForm;
+
+{
+  /* <Button
+              variant="surface"
+              onClick={() => router.push("../")}
+              size="3"
+            >
+              Cancel
+            </Button> */
+}
