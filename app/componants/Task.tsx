@@ -4,12 +4,14 @@ import React, { useState } from "react";
 import { TaskType, priorities } from "../types";
 import { Checkbox, Table, DropdownMenu, Button } from "@radix-ui/themes";
 import FilterBar from "./FilterBar";
+import { useRouter } from "next/navigation";
 
 interface Props {
   tasks: TaskType[];
 }
 
 const Task = ({ tasks }: Props) => {
+  const router = useRouter();
   const [filteredTasks, setFilteredTasks] = useState<TaskType[]>(tasks);
 
   const formatDate = (dateString: Date) => {
@@ -30,53 +32,60 @@ const Task = ({ tasks }: Props) => {
       <Table.Root>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell maxWidth="30px">
+            <Table.ColumnHeaderCell width={"100px"}>
               Completed
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell maxWidth="25px">
+            <Table.ColumnHeaderCell width={"100px"}>
               Priority
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell maxWidth="56px">
+            <Table.ColumnHeaderCell minWidth="100px" maxWidth={"300px"}>
               Task
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell maxWidth="200px">
+            <Table.ColumnHeaderCell minWidth="300px">
               Description
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell minWidth="25px" maxWidth="50px">
+            <Table.ColumnHeaderCell width={"100px"}>
               DueDate
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell />
+            <Table.ColumnHeaderCell width={"50px"} />
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {filteredTasks.map((task: TaskType) => {
             return (
               <Table.Row align="start" key={task.id}>
-                <Table.Cell maxWidth="25px">
+                <Table.Cell>
                   <Checkbox checked={task.completed} aria-readonly />
                 </Table.Cell>
                 {priorities.map((priority) => {
                   if (task.priority === priority.value)
                     return (
-                      <Table.Cell maxWidth="25px">{priority.label}</Table.Cell>
+                      <Table.Cell key={priority.value}>
+                        {priority.label}
+                      </Table.Cell>
                     );
                 })}
 
-                <Table.ColumnHeaderCell maxWidth="56px">
-                  {task.title}
-                </Table.ColumnHeaderCell>
-                <Table.Cell maxWidth="288px">{task.description}</Table.Cell>
-                <Table.Cell minWidth="25px" maxWidth="30px">
-                  {formatDate(task.dueDate)}
-                </Table.Cell>
+                <Table.ColumnHeaderCell>{task.title}</Table.ColumnHeaderCell>
+                <Table.Cell>{task.description}</Table.Cell>
+                <Table.Cell>{formatDate(task.dueDate)}</Table.Cell>
                 <Table.Cell>
                   <DropdownMenu.Root>
                     <DropdownMenu.Trigger>
                       <Button variant="soft">...</Button>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content>
-                      <DropdownMenu.Item>Edit</DropdownMenu.Item>
-                      <DropdownMenu.Item color="red">Delete</DropdownMenu.Item>
+                      <DropdownMenu.Item
+                        onClick={() => router.push("/tasks/" + task.id)}
+                      >
+                        Edit
+                      </DropdownMenu.Item>
+                      <DropdownMenu.Item
+                        color="red"
+                        onClick={() => router.push(".")}
+                      >
+                        Delete
+                      </DropdownMenu.Item>
                     </DropdownMenu.Content>
                   </DropdownMenu.Root>
                 </Table.Cell>
