@@ -50,6 +50,17 @@ export async function updateTask(task: TaskType) {
 
 }
 
+//delete task
+export async function deleteTask(task: TaskType) {
+    const taskURL = baseURL + task.id.toString()
+    try {
+        const response = await axios.delete(taskURL);
+        return response.data;
+
+    } catch (error) {
+        throw new Error('Failed to delete task');
+    }
+}
 
 // axios.patch(url[, data[, config]])
 // const updateUser = await prisma.user.update({
