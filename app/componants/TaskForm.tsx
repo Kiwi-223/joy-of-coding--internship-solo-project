@@ -58,104 +58,107 @@ const TaskForm = ({ task }: Props) => {
     setFormData({ ...formData, dueDate: date });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (task) {
       let updatedTask: TaskType;
       updatedTask = { ...formData, id: task.id };
       console.log(updatedTask);
-      updateTask(updatedTask);
+      await updateTask(updatedTask);
+      // router.push("/tasks");
+      // router.refresh();
     } else {
-      newTask(formData);
+      try {
+        await newTask(formData);
+      } catch (error) {
+        console.log("error: ", error);
+      } finally {
+        // router.push("/tasks");
+        // router.refresh();
+      }
     }
-    router.push("./");
+    router.push("/tasks");
+    router.refresh();
   };
 
   return (
-    <>
-      <form className="w-fit h-fit" onSubmit={handleSubmit}>
-        <Card size="2">
-          <Flex direction="column" gap="3">
-            <Grid gap="1">
-              <Text as="div" weight="bold" size="4" mb="1">
-                {formTitle}
-              </Text>
+    <form
+      className="w-fit h-fit"
+      onSubmit={(e) => {
+        handleSubmit(e);
+      }}
+    >
+      <Card size="2">
+        <Flex direction="column" gap="3">
+          <Grid gap="1">
+            <Text as="div" weight="bold" size="4" mb="1">
+              {formTitle}
+            </Text>
 
-              <Flex className="gap-5" align="center">
-                <TextField.Root
-                  className="min-w-44"
-                  placeholder="Title"
-                  {...register("title", {
-                    onChange: (e) =>
-                      setFormData({ ...formData, title: e.target.value }),
-                  })}
-                />
-
-                <PriorityDropDown
-                  currentPriority={formData.priority}
-                  onChange={(priorityLevel: Priority) => {
-                    setFormData({ ...formData, priority: priorityLevel });
-                  }}
-                />
-
-                <Flex className="gap-1" align="center">
-                  Due Date:
-                  <DatePicker
-                    {...register("dueDate")}
-                    selected={formData.dueDate}
-                    onChange={(date) => handleDateSelect(date)}
-                  />
-                </Flex>
-
-                <Flex gap="1" align="center">
-                  Completed:
-                  <Checkbox
-                    aria-checked={formData.completed}
-                    color="green"
-                    onCheckedChange={(checked: boolean) =>
-                      setFormData({ ...formData, completed: checked })
-                    }
-                  />
-                </Flex>
-              </Flex>
-              <TextArea
-                className="h-72"
-                placeholder="Description"
-                {...register("description", {
+            <Flex className="gap-5" align="center">
+              <TextField.Root
+                className="min-w-44"
+                placeholder="Title"
+                {...register("title", {
                   onChange: (e) =>
-                    setFormData({ ...formData, description: e.target.value }),
+                    setFormData({ ...formData, title: e.target.value }),
                 })}
               />
-            </Grid>
-            <Flex align={"baseline"}>
-              {/* <Button
-                type="button"
-                variant="surface"
-                onClick={() => router.push("./")}
-                size="3"
-              >
-                Cancel
-              </Button>
 
-              <Button type="button" size="3" className="justify-end">
-                Save
-              </Button> */}
+              <PriorityDropDown
+                currentPriority={formData.priority}
+                onChange={(priorityLevel: Priority) => {
+                  setFormData({ ...formData, priority: priorityLevel });
+                }}
+              />
+
+              <Flex className="gap-1" align="center">
+                Due Date:
+                <DatePicker
+                  {...register("dueDate")}
+                  selected={formData.dueDate}
+                  onChange={(date) => handleDateSelect(date)}
+                />
+              </Flex>
+
+              <Flex gap="1" align="center">
+                Completed:
+                <Checkbox
+                  aria-checked={formData.completed}
+                  color="green"
+                  onCheckedChange={(checked: boolean) =>
+                    setFormData({ ...formData, completed: checked })
+                  }
+                />
+              </Flex>
             </Flex>
+            <TextArea
+              className="h-72"
+              placeholder="Description"
+              {...register("description", {
+                onChange: (e) =>
+                  setFormData({ ...formData, description: e.target.value }),
+              })}
+            />
+          </Grid>
+          <Flex align={"baseline"}>
+            <Button
+              color="red"
+              variant="surface"
+              onClick={() => router.push("./")}
+              size="3"
+            >
+              Cancel
+            </Button>
+
+            <Button color="green" size="3" className="justify-end">
+              Save
+            </Button>
           </Flex>
-        </Card>
-      </form>
-      <Button onClick={handleSubmit}>Save</Button>
-    </>
+        </Flex>
+      </Card>
+    </form>
   );
 };
 
 export default TaskForm;
-
-{
-  /* <Button
-              variant="surface"
-              onClick={() => router.push("../")}
-              size="3"
-            >
-              Cancel
-            </Button> */
-}

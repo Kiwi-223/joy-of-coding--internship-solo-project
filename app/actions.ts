@@ -55,7 +55,7 @@ export async function deleteTask(task: TaskType) {
     const taskURL = baseURL + task.id.toString()
     try {
         const response = await axios.delete(taskURL);
-        return response.data;
+        return response.data
 
     } catch (error) {
         throw new Error('Failed to delete task');

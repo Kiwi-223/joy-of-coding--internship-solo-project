@@ -5,6 +5,7 @@ import { TaskType, priorities } from "../types";
 import { Checkbox, Table, DropdownMenu, Button } from "@radix-ui/themes";
 import FilterBar from "./FilterBar";
 import { useRouter } from "next/navigation";
+import { deleteTask } from "../actions";
 
 interface Props {
   tasks: TaskType[];
@@ -22,6 +23,19 @@ const Task = ({ tasks }: Props) => {
       year: "numeric",
     });
   };
+
+  const handleDelete = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    task: TaskType
+  ) => {
+    e.preventDefault();
+    await deleteTask(task);
+    console.log("task deleted");
+    router.refresh();
+    console.log("refreshed");
+  };
+
+  // const updateCompleted = () => {};
 
   return (
     <div>
@@ -50,12 +64,17 @@ const Task = ({ tasks }: Props) => {
             <Table.ColumnHeaderCell width={"50px"} />
           </Table.Row>
         </Table.Header>
+
         <Table.Body>
           {filteredTasks.map((task: TaskType) => {
             return (
               <Table.Row align="start" key={task.id}>
                 <Table.Cell>
-                  <Checkbox checked={task.completed} aria-readonly />
+                  <Checkbox
+                    color="green"
+                    checked={task.completed}
+                    aria-readonly
+                  />
                 </Table.Cell>
                 {priorities.map((priority) => {
                   if (task.priority === priority.value)
@@ -82,7 +101,8 @@ const Task = ({ tasks }: Props) => {
                       </DropdownMenu.Item>
                       <DropdownMenu.Item
                         color="red"
-                        onClick={() => router.push(".")}
+                        // onClick={() => console.log("onclick task ", task.id)}
+                        onClick={(e) => handleDelete(e, task)}
                       >
                         Delete
                       </DropdownMenu.Item>
