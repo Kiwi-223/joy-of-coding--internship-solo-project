@@ -11,15 +11,14 @@ interface Props {
 }
 
 const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
-  const [priority, setPriority] = useState<string[]>([]);
-  const [status, setStatus] = useState<boolean[]>([]);
+  const [filteredPriority, setFilteredPriority] = useState<string[]>([]);
+  const [filteredStatus, setFilteredStatus] = useState<boolean[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
 
   const filterTasks = (
     selectedPriority: string[],
     selectedStatus: boolean[]
   ) => {
-    // console.log(selectedPriority, "priority");
     let filteredTasks = allTasks;
 
     if (selectedPriority.length > 0) {
@@ -30,7 +29,7 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
     }
 
     if (selectedStatus.length > 0) {
-      filteredTasks = allTasks.filter((task) =>
+      filteredTasks = filteredTasks.filter((task) =>
         selectedStatus.includes(task.completed)
       );
     }
@@ -40,34 +39,38 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
   };
 
   const handlePriority = (selectedPriority: string) => {
-    if (priority.includes(selectedPriority)) {
-      setPriority(priority.filter((oldValue) => oldValue !== selectedPriority));
+    if (filteredPriority.includes(selectedPriority)) {
+      setFilteredPriority(
+        filteredPriority.filter((oldValue) => oldValue !== selectedPriority)
+      );
       filterTasks(
-        priority.filter((oldValue) => oldValue !== selectedPriority),
-        status
+        filteredPriority.filter((oldValue) => oldValue !== selectedPriority),
+        filteredStatus
       );
     } else {
-      setPriority([...priority, selectedPriority]);
-      filterTasks([...priority, selectedPriority], status);
+      setFilteredPriority([...filteredPriority, selectedPriority]);
+      filterTasks([...filteredPriority, selectedPriority], filteredStatus);
     }
   };
 
   const handleStatus = (selectedStatus: boolean) => {
-    if (status.includes(selectedStatus)) {
-      setStatus(status.filter((oldValue) => oldValue !== selectedStatus));
+    if (filteredStatus.includes(selectedStatus)) {
+      setFilteredStatus(
+        filteredStatus.filter((oldValue) => oldValue !== selectedStatus)
+      );
       filterTasks(
-        priority,
-        status.filter((oldValue) => oldValue !== selectedStatus)
+        filteredPriority,
+        filteredStatus.filter((oldValue) => oldValue !== selectedStatus)
       );
     } else {
-      setStatus([...status, selectedStatus]);
-      filterTasks(priority, [...status, selectedStatus]);
+      setFilteredStatus([...filteredStatus, selectedStatus]);
+      filterTasks(filteredPriority, [...filteredStatus, selectedStatus]);
     }
   };
 
   const handleReset = () => {
-    setPriority([]);
-    setStatus([]);
+    setFilteredPriority([]);
+    setFilteredStatus([]);
     setFilteredTasks(allTasks);
     setIsFiltered(false);
   };
@@ -79,14 +82,14 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
         <FilterSelectDropDown
           title="Status"
           options={statusFilter}
-          selectedValues={status}
+          selectedValues={filteredStatus}
           onChange={handleStatus}
         />
 
         <FilterSelectDropDown
           title="Priority"
           options={priorities}
-          selectedValues={priority}
+          selectedValues={filteredPriority}
           onChange={handlePriority}
         />
         {isFiltered && (

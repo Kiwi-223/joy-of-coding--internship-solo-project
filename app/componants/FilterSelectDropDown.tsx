@@ -33,7 +33,7 @@ const FilterSelectDropDown = ({
                 <Flex key={option.value.toString()} gap={"2"}>
                   <Checkbox
                     onCheckedChange={() => onChange(option.value)}
-                    aria-checked={selectedValues.includes(option.value)}
+                    checked={selectedValues.includes(option.value)}
                   />
                   <Text>{option.label}</Text>
                 </Flex>
