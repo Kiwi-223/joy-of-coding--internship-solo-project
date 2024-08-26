@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import { TaskType, priorities } from "../types";
 import { Checkbox, Table, DropdownMenu, Button } from "@radix-ui/themes";
 import FilterBar from "./FilterBar";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { deleteTask } from "../actions";
+import axios from "axios";
 
 interface Props {
   tasks: TaskType[];
@@ -13,6 +14,9 @@ interface Props {
 
 const Task = ({ tasks }: Props) => {
   const router = useRouter();
+  const pathName = usePathname();
+  console.log(pathName);
+  console.log(router);
   const [filteredTasks, setFilteredTasks] = useState<TaskType[]>(tasks);
 
   const formatDate = (dateString: Date) => {
@@ -28,11 +32,31 @@ const Task = ({ tasks }: Props) => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     task: TaskType
   ) => {
-    e.preventDefault();
-    await deleteTask(task);
-    console.log("task deleted");
-    router.refresh();
-    console.log("refreshed");
+    // e.preventDefault();
+    try {
+      await axios.delete(
+        "http://localhost:3000/api/tasks/" + task.id.toString()
+      );
+      console.log("task deleted");
+      console.log(pathName);
+      console.log(router);
+      router.push("/tasks/");
+      router.refresh();
+      console.log(pathName);
+      console.log(router);
+      console.log("refreshed");
+      // await deleteTask(task);
+    } catch (error) {
+      console.log("error");
+    }
+    // finally {
+    //   router.push('./')
+    //   router.refresh();
+    // }
+
+    // console.log("task deleted");
+    // router.refresh();
+    // console.log("refreshed");
   };
 
   // const updateCompleted = () => {};
@@ -101,7 +125,6 @@ const Task = ({ tasks }: Props) => {
                       </DropdownMenu.Item>
                       <DropdownMenu.Item
                         color="red"
-                        // onClick={() => console.log("onclick task ", task.id)}
                         onClick={(e) => handleDelete(e, task)}
                       >
                         Delete

@@ -19,7 +19,6 @@ import { useRouter } from "next/navigation";
 import { TaskType } from "../types";
 import { updateTask, newTask } from "../actions";
 import { Priority } from "@prisma/client";
-import Link from "next/link";
 
 interface Props {
   task?: TaskType;
@@ -115,6 +114,7 @@ const TaskForm = ({ task }: Props) => {
               <Flex className="gap-1" align="center">
                 Due Date:
                 <DatePicker
+                  // dateFormat={""}
                   {...register("dueDate")}
                   selected={formData.dueDate}
                   onChange={(date) => handleDateSelect(date)}

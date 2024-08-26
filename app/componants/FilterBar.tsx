@@ -4,6 +4,9 @@ import { Box, Button, Flex, Text } from "@radix-ui/themes";
 import { statusFilter, priorities, TaskType } from "../types";
 import { LuX } from "react-icons/lu";
 import FilterSelectDropDown from "./FilterSelectDropDown";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { addMonths } from "react-datepicker/dist/date_utils";
 
 interface Props {
   allTasks: TaskType[];
@@ -14,6 +17,13 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
   const [filteredPriority, setFilteredPriority] = useState<string[]>([]);
   const [filteredStatus, setFilteredStatus] = useState<boolean[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
+
+  const dateFilter = (update) => {
+    console.log(update);
+    setDateRange(update);
+  };
 
   const filterTasks = (
     selectedPriority: string[],
@@ -85,12 +95,20 @@ const FilterBar = ({ allTasks, setFilteredTasks }: Props) => {
           selectedValues={filteredStatus}
           onChange={handleStatus}
         />
-
         <FilterSelectDropDown
           title="Priority"
           options={priorities}
           selectedValues={filteredPriority}
           onChange={handlePriority}
+        />
+        DueDate:
+        <DatePicker
+          selectsRange={true}
+          startDate={startDate}
+          endDate={endDate}
+          onChange={(update) => {
+            dateFilter(update);
+          }}
         />
         {isFiltered && (
           <Button variant="ghost" onClick={handleReset}>
