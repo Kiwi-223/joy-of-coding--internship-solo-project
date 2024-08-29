@@ -1,12 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import { TaskType, priorities } from "../types";
-import { Checkbox, Table, DropdownMenu, Button } from "@radix-ui/themes";
-import FilterBar from "./FilterBar";
-import { useRouter, usePathname } from "next/navigation";
+import React, { useMemo, useState } from "react";
+import { TaskType, priorities, statusFilter } from "../types";
+import {
+  Checkbox,
+  Table,
+  DropdownMenu,
+  Button,
+  Box,
+  Flex,
+  Text,
+} from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 import { deleteTask } from "../actions";
-import axios from "axios";
+import { LuX } from "react-icons/lu";
+import FilterSelectDropDown from "./FilterSelectDropDown";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { revalidatePath } from "next/cache";
 
 interface Props {
   tasks: TaskType[];
@@ -14,10 +25,12 @@ interface Props {
 
 const Task = ({ tasks }: Props) => {
   const router = useRouter();
-  const pathName = usePathname();
-  console.log(pathName);
-  console.log(router);
-  const [filteredTasks, setFilteredTasks] = useState<TaskType[]>(tasks);
+  const [filteredPriority, setFilteredPriority] = useState<string[]>([]);
+  const [filteredStatus, setFilteredStatus] = useState<boolean[]>([]);
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
+  
 
   const formatDate = (dateString: Date) => {
     const date = new Date(dateString);
@@ -32,41 +45,116 @@ const Task = ({ tasks }: Props) => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     task: TaskType
   ) => {
-    // e.preventDefault();
     try {
-      await axios.delete(
-        "http://localhost:3000/api/tasks/" + task.id.toString()
-      );
-      console.log("task deleted");
-      console.log(pathName);
-      console.log(router);
-      router.push("/tasks/");
-      router.refresh();
-      console.log(pathName);
-      console.log(router);
-      console.log("refreshed");
-      // await deleteTask(task);
-    } catch (error) {
-      console.log("error");
-    }
-    // finally {
-    //   router.push('./')
-    //   router.refresh();
-    // }
+      await deleteTask(task);
+      revalidatePath('/tasks/')
+      // router.refresh();
+    } catch (error) {}
+  };
 
-    // console.log("task deleted");
-    // router.refresh();
-    // console.log("refreshed");
+  // const dateFilter = (update) => {
+  //   setDateRange(update);
+  // };
+ 
+  const filterTasks = (
+    selectedPriority: string[],
+    selectedStatus: boolean[]
+  ) => {
+    let tempFilteredTasks = tasks;
+
+    if (selectedPriority.length > 0) {
+      tempFilteredTasks = tasks.filter((task) => {
+        return selectedPriority.includes(task.priority);
+      });
+    }
+
+    if (selectedStatus.length > 0) {
+      tempFilteredTasks = tempFilteredTasks.filter((task) =>
+        selectedStatus.includes(task.completed)
+      );
+    }
+
+    setIsFiltered(selectedPriority.length > 0 || selectedStatus.length > 0);
+    return tempFilteredTasks;
+  };
+
+  const handlePriority = (selectedPriority: string) => {
+    if (filteredPriority.includes(selectedPriority)) {
+      setFilteredPriority(
+        filteredPriority.filter((oldValue) => oldValue !== selectedPriority)
+      );
+      filterTasks(
+        filteredPriority.filter((oldValue) => oldValue !== selectedPriority),
+        filteredStatus
+      );
+    } else {
+      setFilteredPriority([...filteredPriority, selectedPriority]);
+      filterTasks([...filteredPriority, selectedPriority], filteredStatus);
+    }
+  };
+
+  const filteredTasks = useMemo(
+    () => filterTasks(filteredPriority, filteredStatus),
+    [tasks, filteredPriority, filteredStatus]
+  );
+
+  const handleStatus = (selectedStatus: boolean) => {
+    if (filteredStatus.includes(selectedStatus)) {
+      setFilteredStatus(
+        filteredStatus.filter((oldValue) => oldValue !== selectedStatus)
+      );
+      filterTasks(
+        filteredPriority,
+        filteredStatus.filter((oldValue) => oldValue !== selectedStatus)
+      );
+    } else {
+      setFilteredStatus([...filteredStatus, selectedStatus]);
+      filterTasks(filteredPriority, [...filteredStatus, selectedStatus]);
+    }
+  };
+
+  const handleReset = () => {
+    setFilteredPriority([]);
+    setFilteredStatus([]);
+    setIsFiltered(false);
   };
 
   // const updateCompleted = () => {};
 
   return (
     <div>
-      <FilterBar
-        setFilteredTasks={(newTasks) => setFilteredTasks(newTasks)}
-        allTasks={tasks}
-      />
+      <Box>
+        <Flex gap="2">
+          <Text>Filters:</Text>
+          <FilterSelectDropDown
+            title="Status"
+            options={statusFilter}
+            selectedValues={filteredStatus}
+            onChange={handleStatus}
+          />
+          <FilterSelectDropDown
+            title="Priority"
+            options={priorities}
+            selectedValues={filteredPriority}
+            onChange={handlePriority}
+          />
+          DueDate:
+          <DatePicker
+            selectsRange={true}
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(update) => {
+              setDateRange(update);
+            }}
+          />
+          {isFiltered && (
+            <Button variant="ghost" onClick={handleReset}>
+              Clear Filters <LuX className="ml-2 h-4 w-4" />
+            </Button>
+          )}
+        </Flex>
+      </Box>
+
       <Table.Root>
         <Table.Header>
           <Table.Row>
