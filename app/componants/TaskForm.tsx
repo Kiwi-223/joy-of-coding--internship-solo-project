@@ -57,23 +57,28 @@ const TaskForm = ({ task }: Props) => {
     setFormData({ ...formData, dueDate: date });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    type: string
+  ) => {
     e.preventDefault();
-    if (task) {
-      let updatedTask: TaskType;
-      updatedTask = { ...formData, id: task.id };
-      console.log(updatedTask);
-      await updateTask(updatedTask);
-      // router.push("/tasks");
-      // router.refresh();
-    } else {
-      try {
-        await newTask(formData);
-      } catch (error) {
-        console.log("error: ", error);
-      } finally {
+    if (type === "save") {
+      if (task) {
+        let updatedTask: TaskType;
+        updatedTask = { ...formData, id: task.id };
+        console.log(updatedTask);
+        await updateTask(updatedTask);
         // router.push("/tasks");
         // router.refresh();
+      } else {
+        try {
+          await newTask(formData);
+        } catch (error) {
+          console.log("error: ", error);
+        } finally {
+          // router.push("/tasks");
+          // router.refresh();
+        }
       }
     }
     router.push("/tasks");
@@ -81,12 +86,7 @@ const TaskForm = ({ task }: Props) => {
   };
 
   return (
-    <form
-      className="w-fit h-fit"
-      onSubmit={(e) => {
-        handleSubmit(e);
-      }}
-    >
+    <form className="w-fit h-fit">
       <Card size="2">
         <Flex direction="column" gap="3">
           <Grid gap="1">
@@ -145,13 +145,22 @@ const TaskForm = ({ task }: Props) => {
             <Button
               color="red"
               variant="surface"
-              onClick={() => router.push("./")}
+              onClick={(e) => {
+                handleSubmit(e, "cancel");
+              }}
               size="3"
             >
               Cancel
             </Button>
 
-            <Button color="green" size="3" className="justify-end">
+            <Button
+              color="green"
+              size="3"
+              className="justify-end"
+              onClick={(e) => {
+                handleSubmit(e, "save");
+              }}
+            >
               Save
             </Button>
           </Flex>
