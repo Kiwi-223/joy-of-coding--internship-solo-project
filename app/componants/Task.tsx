@@ -148,7 +148,7 @@ const Task = ({ tasks }: Props) => {
   //Handle updating displaied tasks based on filters
   const filteredTasks = useMemo(
     () => filterTasks(filteredPriority, filteredStatus),
-    [tasks, filteredPriority, filteredStatus, dateRange, sortKey]
+    [tasks, filteredPriority, filteredStatus, dateRange, sortKey, sortOrder]
   );
 
   //Reset all task filters
