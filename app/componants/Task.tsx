@@ -18,6 +18,7 @@ import FilterSelectDropDown from "./FilterSelectDropDown";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { revalidatePath } from "next/cache";
+import { updateTask } from "../actions";
 
 interface Props {
   tasks: TaskType[];
@@ -28,7 +29,10 @@ const Task = ({ tasks }: Props) => {
   const [filteredPriority, setFilteredPriority] = useState<string[]>([]);
   const [filteredStatus, setFilteredStatus] = useState<boolean[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
-  const [dateRange, setDateRange] = useState([null, null]);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
   const [startDate, endDate] = dateRange;
 
   const formatDate = (dateString: Date) => {
@@ -70,12 +74,12 @@ const Task = ({ tasks }: Props) => {
       );
     }
 
-    if (dateRange[0] !== null) {
+    if (dateRange[0]) {
       tempFilteredTasks = tempFilteredTasks.filter((task) => {
         const taskDate = formatDate(task.dueDate);
         return (
-          taskDate >= formatDate(dateRange[0]) &&
-          taskDate <= formatDate(dateRange[1])
+          taskDate >= formatDate(dateRange[0]!) &&
+          taskDate <= formatDate(dateRange[1]!)
         );
       });
     }
@@ -124,7 +128,12 @@ const Task = ({ tasks }: Props) => {
     setIsFiltered(false);
   };
 
-  // const updateCompleted = () => {};
+  //Handle change to completed checkbox
+  const updateCompleted = async (task: TaskType, newValue: boolean) => {
+    let updatedTask = { ...task, completed: newValue };
+    await updateTask(updatedTask);
+    router.refresh();
+  };
 
   return (
     <div>
@@ -147,8 +156,8 @@ const Task = ({ tasks }: Props) => {
           <DatePicker
             placeholderText="Any"
             selectsRange={true}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={startDate || undefined}
+            endDate={endDate || undefined}
             onChange={(update) => {
               setDateRange(update);
             }}
@@ -191,7 +200,10 @@ const Task = ({ tasks }: Props) => {
                   <Checkbox
                     color="green"
                     checked={task.completed}
-                    aria-readonly
+                    // aria-readonly
+                    onCheckedChange={(checked: boolean) =>
+                      updateCompleted(task, checked)
+                    }
                   />
                 </Table.Cell>
                 {priorities.map((priority) => {
