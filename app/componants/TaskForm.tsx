@@ -159,7 +159,7 @@ const TaskForm = ({ task }: Props) => {
                 <Button disabled={true} size="3">
                   Save
                 </Button>{" "}
-                <Text color="red">Tile is required</Text>{" "}
+                <Text color="red">Title is required</Text>{" "}
               </>
             )}
             {isValid && (
