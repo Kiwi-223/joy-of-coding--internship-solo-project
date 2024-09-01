@@ -30,7 +30,6 @@ const Task = ({ tasks }: Props) => {
   const [isFiltered, setIsFiltered] = useState(false);
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
-  
 
   const formatDate = (dateString: Date) => {
     const date = new Date(dateString);
@@ -47,15 +46,12 @@ const Task = ({ tasks }: Props) => {
   ) => {
     try {
       await deleteTask(task);
-      revalidatePath('/tasks/')
-      // router.refresh();
+      router.refresh();
+      revalidatePath("/tasks/");
     } catch (error) {}
   };
 
-  // const dateFilter = (update) => {
-  //   setDateRange(update);
-  // };
- 
+  //Filter displayed tasks based on user filter options (dueDate, priority, status)
   const filterTasks = (
     selectedPriority: string[],
     selectedStatus: boolean[]
@@ -63,7 +59,7 @@ const Task = ({ tasks }: Props) => {
     let tempFilteredTasks = tasks;
 
     if (selectedPriority.length > 0) {
-      tempFilteredTasks = tasks.filter((task) => {
+      tempFilteredTasks = tempFilteredTasks.filter((task) => {
         return selectedPriority.includes(task.priority);
       });
     }
@@ -74,48 +70,57 @@ const Task = ({ tasks }: Props) => {
       );
     }
 
-    setIsFiltered(selectedPriority.length > 0 || selectedStatus.length > 0);
+    if (dateRange[0] !== null) {
+      tempFilteredTasks = tempFilteredTasks.filter((task) => {
+        const taskDate = formatDate(task.dueDate);
+        return (
+          taskDate >= formatDate(dateRange[0]) &&
+          taskDate <= formatDate(dateRange[1])
+        );
+      });
+    }
+
+    setIsFiltered(
+      selectedPriority.length > 0 ||
+        selectedStatus.length > 0 ||
+        dateRange[0] !== null
+    );
     return tempFilteredTasks;
   };
 
+  //handle change in the selection of priority filters
   const handlePriority = (selectedPriority: string) => {
     if (filteredPriority.includes(selectedPriority)) {
       setFilteredPriority(
         filteredPriority.filter((oldValue) => oldValue !== selectedPriority)
       );
-      filterTasks(
-        filteredPriority.filter((oldValue) => oldValue !== selectedPriority),
-        filteredStatus
-      );
     } else {
       setFilteredPriority([...filteredPriority, selectedPriority]);
-      filterTasks([...filteredPriority, selectedPriority], filteredStatus);
     }
   };
 
-  const filteredTasks = useMemo(
-    () => filterTasks(filteredPriority, filteredStatus),
-    [tasks, filteredPriority, filteredStatus]
-  );
-
+  //handle change in the selection of status filters
   const handleStatus = (selectedStatus: boolean) => {
     if (filteredStatus.includes(selectedStatus)) {
       setFilteredStatus(
         filteredStatus.filter((oldValue) => oldValue !== selectedStatus)
       );
-      filterTasks(
-        filteredPriority,
-        filteredStatus.filter((oldValue) => oldValue !== selectedStatus)
-      );
     } else {
       setFilteredStatus([...filteredStatus, selectedStatus]);
-      filterTasks(filteredPriority, [...filteredStatus, selectedStatus]);
     }
   };
 
+  //Handle updating displaied tasks based on filters
+  const filteredTasks = useMemo(
+    () => filterTasks(filteredPriority, filteredStatus),
+    [tasks, filteredPriority, filteredStatus, dateRange]
+  );
+
+  //Reset all task filters
   const handleReset = () => {
     setFilteredPriority([]);
     setFilteredStatus([]);
+    setDateRange([null, null]);
     setIsFiltered(false);
   };
 
@@ -140,6 +145,7 @@ const Task = ({ tasks }: Props) => {
           />
           DueDate:
           <DatePicker
+            placeholderText="Any"
             selectsRange={true}
             startDate={startDate}
             endDate={endDate}
