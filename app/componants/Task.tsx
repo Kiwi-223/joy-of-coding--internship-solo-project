@@ -34,6 +34,10 @@ const Task = ({ tasks }: Props) => {
     null,
   ]);
   const [startDate, endDate] = dateRange;
+  const [sortKey, setSortKey] = useState<
+    "dueDate" | "priority" | "title" | "completed" |"description"
+  >("dueDate");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const formatDate = (dateString: Date) => {
     const date = new Date(dateString);
@@ -84,6 +88,33 @@ const Task = ({ tasks }: Props) => {
       });
     }
 
+    // Sort tasks by due date
+    tempFilteredTasks.sort((a, b) => {
+      let comparison = 0;
+      switch (sortKey) {
+        case "priority":
+          const priorityOrder = ["low", "medium", "high", "urgent"]
+          comparison =
+          priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority);
+          break;
+        case "title":
+          comparison = a.title.localeCompare(b.title);
+          break;
+        case "description":
+          comparison = a.description.localeCompare(b.description);
+          break;
+        case "completed":
+          comparison = a.completed === b.completed ? 0 : a.completed ? 1 : -1;
+          break;
+        case "dueDate":
+        default:
+          comparison =
+            new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+          break;
+      }
+      return sortOrder === "asc" ? comparison : -comparison;
+    });
+
     setIsFiltered(
       selectedPriority.length > 0 ||
         selectedStatus.length > 0 ||
@@ -117,7 +148,7 @@ const Task = ({ tasks }: Props) => {
   //Handle updating displaied tasks based on filters
   const filteredTasks = useMemo(
     () => filterTasks(filteredPriority, filteredStatus),
-    [tasks, filteredPriority, filteredStatus, dateRange]
+    [tasks, filteredPriority, filteredStatus, dateRange, sortKey]
   );
 
   //Reset all task filters
@@ -133,6 +164,15 @@ const Task = ({ tasks }: Props) => {
     let updatedTask = { ...task, completed: newValue };
     await updateTask(updatedTask);
     router.refresh();
+  };
+
+  const handleSort = (key: "dueDate" | "priority" | "title" | "completed" | "description") => {
+    if (sortKey === key) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortKey(key);
+      setSortOrder("asc");
+    }
   };
 
   return (
@@ -173,20 +213,36 @@ const Task = ({ tasks }: Props) => {
       <Table.Root>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell width={"100px"}>
+            <Table.ColumnHeaderCell
+              width={"100px"}
+              onClick={() => handleSort("completed")}
+            >
               Completed
+              {sortKey === "completed" && (sortOrder === "asc" ? "↑" : "↓")}
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell width={"100px"}>
+            <Table.ColumnHeaderCell
+              width={"100px"}
+              onClick={() => handleSort("priority")}
+            >
               Priority
+              {sortKey === "priority" && (sortOrder === "asc" ? "↑" : "↓")}
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell minWidth="100px" maxWidth={"300px"}>
-              Task
+            <Table.ColumnHeaderCell
+              minWidth="100px"
+              maxWidth={"300px"}
+              onClick={() => handleSort("title")}
+            >
+              Task {sortKey === "title" && (sortOrder === "asc" ? "↑" : "↓")}
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell minWidth="300px">
-              Description
+            <Table.ColumnHeaderCell minWidth="300px" onClick={() => handleSort("description")}>
+              Description {sortKey === "description" && (sortOrder === "asc" ? "↑" : "↓")}
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell width={"100px"}>
-              DueDate
+            <Table.ColumnHeaderCell
+              width={"100px"}
+              onClick={() => handleSort("dueDate")}
+            >
+              Due Date
+              {sortKey === "dueDate" && (sortOrder === "asc" ? "↑" : "↓")}
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell width={"50px"} />
           </Table.Row>
@@ -195,7 +251,7 @@ const Task = ({ tasks }: Props) => {
         <Table.Body>
           {filteredTasks.map((task: TaskType) => {
             return (
-              <Table.Row align="start" key={task.id}>
+              <Table.Row key={task.id}>
                 <Table.Cell>
                   <Checkbox
                     color="green"
