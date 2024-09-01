@@ -66,18 +66,12 @@ const TaskForm = ({ task }: Props) => {
       if (task) {
         let updatedTask: TaskType;
         updatedTask = { ...formData, id: task.id };
-        console.log(updatedTask);
         await updateTask(updatedTask);
-        // router.push("/tasks");
-        // router.refresh();
       } else {
         try {
           await newTask(formData);
         } catch (error) {
           console.log("error: ", error);
-        } finally {
-          // router.push("/tasks");
-          // router.refresh();
         }
       }
     }
@@ -114,17 +108,18 @@ const TaskForm = ({ task }: Props) => {
               <Flex className="gap-1" align="center">
                 Due Date:
                 <DatePicker
-                  // dateFormat={""}
                   {...register("dueDate")}
                   selected={formData.dueDate}
-                  onChange={(date) => handleDateSelect(date)}
+                  onChange={(date) => {
+                    if (date) handleDateSelect(date);
+                  }}
                 />
               </Flex>
 
               <Flex gap="1" align="center">
                 Completed:
                 <Checkbox
-                  aria-checked={formData.completed}
+                  checked={formData.completed}
                   color="green"
                   onCheckedChange={(checked: boolean) =>
                     setFormData({ ...formData, completed: checked })
