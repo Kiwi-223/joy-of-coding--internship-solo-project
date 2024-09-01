@@ -15,12 +15,12 @@ datasource db {
 
 model Task {
   id          Int      @id @unique @default(autoincrement())
-  title       String   @db.VarChar(255)
-  description String?  @db.VarChar(255)
+  title       String   @db.VarChar(50)
+  description String?  @db.VarChar(150)
   completed   Boolean  @default(false)
   priority    Priority
   dueDate     DateTime @default(now())
-}
+} 
 
 enum Priority {
   low

@@ -19,6 +19,8 @@ import { useRouter } from "next/navigation";
 import { TaskType } from "../types";
 import { updateTask, newTask } from "../actions";
 import { Priority } from "@prisma/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { taskSchema } from "../validationSchema";
 
 interface Props {
   task?: TaskType;
@@ -43,7 +45,12 @@ const TaskForm = ({ task }: Props) => {
     priority: task ? task.priority : Priority.low,
   });
   const formTitle = task ? "Edit Task" : "New Task";
-  const { register, setValue } = useForm<TaskForm>({
+  const {
+    register,
+    setValue,
+    formState: { isValid },
+  } = useForm<TaskForm>({
+    resolver: zodResolver(taskSchema),
     defaultValues: {
       title: formData.title,
       dueDate: formData.dueDate,
@@ -147,17 +154,25 @@ const TaskForm = ({ task }: Props) => {
             >
               Cancel
             </Button>
-
-            <Button
-              color="green"
-              size="3"
-              className="justify-end"
-              onClick={(e) => {
-                handleSubmit(e, "save");
-              }}
-            >
-              Save
-            </Button>
+            {!isValid && (
+              <>
+                <Button disabled={true} size="3">
+                  Save
+                </Button>{" "}
+                <Text color="red">Tile is required</Text>{" "}
+              </>
+            )}
+            {isValid && (
+              <Button
+                color="green"
+                size="3"
+                onClick={(e) => {
+                  handleSubmit(e, "save");
+                }}
+              >
+                Save
+              </Button>
+            )}
           </Flex>
         </Flex>
       </Card>
